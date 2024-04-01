@@ -50,7 +50,16 @@
     <!--查询客户列表-->
     <select id="getAppCustList" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT c.cust_id as custId,c.cust_name as custName, c.complete, c.join_time as joinTime,g.grade_name as gradeName,c.total_recharge_money as totalRechargeMoney,
-            (SELECT count(*) FROM l_order WHERE l_order.order_status = 1 and l_order.cust_id = c.cust_id  and l_order.receive_time &lt; UNIX_TIMESTAMP(curdate())) as num
+        (
+        SELECT
+        count(*)
+        FROM
+        l_order
+        WHERE
+        l_order.order_status = 1
+        AND l_order.cust_id = c.cust_id
+        AND (l_order.receive_time &lt; UNIX_TIMESTAMP(curdate()) OR l_order.receive_time = l_order.create_time )) AS num,
+        (SELECT count(*) FROM l_order WHERE l_order.order_status = 1 and l_order.cust_id = c.cust_id)  as numIng
 
         from c_cust as c left join t_goods_grade as g on g.id=c.`level`
         <where>
@@ -62,7 +71,16 @@
     <!--查询充值客户列表-->
     <select id="getAppCustListRecharge" resultType="java.util.Map" parameterType="java.util.Map">
         SELECT c.cust_id as custId,c.cust_name as custName, c.complete, c.join_time as joinTime,g.grade_name as gradeName,c.total_recharge_money as totalRechargeMoney,
-        (SELECT count(*) FROM l_order WHERE l_order.order_status = 1 and l_order.cust_id = c.cust_id  and l_order.receive_time &lt; UNIX_TIMESTAMP(curdate())) as num
+        (
+        SELECT
+        count(*)
+        FROM
+        l_order
+        WHERE
+        l_order.order_status = 1
+        AND l_order.cust_id = c.cust_id
+        AND (l_order.receive_time &lt; UNIX_TIMESTAMP(curdate()) OR l_order.receive_time = l_order.create_time )) AS num,
+        (SELECT count(*) FROM l_order WHERE l_order.order_status = 1 and l_order.cust_id = c.cust_id)  as numIng
 
         from c_cust as c left join t_goods_grade as g on g.id=c.`level`
         <where>
@@ -81,7 +99,6 @@
               and (type='7' or type='8' or type='9')
           </where>
     </select>
-
 
     <!-- 获取今日抢单单数和收益 -->
     <select id="getTodayGOrderTotal" parameterType="java.util.Map" resultType="java.util.Map">

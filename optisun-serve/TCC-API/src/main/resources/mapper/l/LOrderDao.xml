@@ -19,6 +19,4 @@
         <result property="doneTime" column="done_time"/>
         <result property="salesmanId" column="salesman_id"/>
     </resultMap>
-
-
 </mapper>

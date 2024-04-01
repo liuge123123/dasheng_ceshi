@@ -37,5 +37,6 @@ public interface LOrderService extends IService<LOrderEntity> {
     void orderReceive(Long custId, Long goodsId);
 
     void quitnew(Long orderId, String cancelRemark, int quitType);
+
 }
 

@@ -78,7 +78,8 @@ public class CustServiceImpl extends ServiceImpl<CustDao, CustEntity> implements
 
     @Autowired
     private LOrderCommmissionService lOrderCommmissionService;
-
+    @Autowired
+    private CustDao custDao;
     @Override
     public PageUtils queryPage(@Param("condition") Map<String, Object> params) {
         IPage page = new Query<>().getPage(params);
@@ -386,5 +387,11 @@ public class CustServiceImpl extends ServiceImpl<CustDao, CustEntity> implements
         lOrderCommmissionService.update(new LambdaUpdateWrapper<LOrderCommmissionEntity>().eq(LOrderCommmissionEntity::getSalesmanId, sourceUserId)
                 .set(LOrderCommmissionEntity::getSalesmanId, destUserId));
 
+    }
+
+    @Override
+    public BigDecimal getMoneyNow(Long custId) {
+
+        return custDao.getMoneyNow(custId);
     }
 }

@@ -14,7 +14,10 @@
 						<!-- <view class="cell"><text>{{item.gradeName}}</text></view> -->
 						<!-- <view class="cell"><text>{{item.totalRechargeMoney>0?'recharged':'Not recharged'}}</text></view> -->
 						<view v-if="item.num > 0" class="cell" style="color: orange;"><text>non</text></view>
-						<view v-if="item.num == 0" class="cell"><text>Acquis</text></view>
+						<view v-if="item.numIng == 0" class="cell"><text>null</text></view>
+						<view v-else-if="item.numIng > 0 && item.num == 0" class="cell">
+							<text>Acquis</text>
+						</view>
 					</view>
 					<uni-load-more :status="loadingStatus"></uni-load-more>
 				</view>

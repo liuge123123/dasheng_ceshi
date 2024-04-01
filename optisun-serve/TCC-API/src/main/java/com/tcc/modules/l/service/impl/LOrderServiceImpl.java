@@ -905,9 +905,9 @@ public class LOrderServiceImpl extends ServiceImpl<LOrderDao, LOrderEntity> impl
 //        if(currentTime-order.getReceiveTime() < room.getReceiveCircle()*3600){
 //            throw new WTDPException(room.getReceiveCircle()+"", ResultCode.RESULT_100044.getCode());
 //        }
-        //当前日期小于等于购买日期 或者 当前日期小于等于上次领取日期 不可领取 20240306
-        if(DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(order.getCreateTime())) <= 0 ||
-                DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(order.getReceiveTime())) <= 0)
+        //当前日期小于等于购买日期 或者 当前日期小于等于上次领取日期 不可领取 20240306 20240401
+        if(DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(order.getCreateTime())) < 0 ||
+                DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(order.getReceiveTime())) < 0)
         {
             throw new WTDPException(room.getReceiveCircle()+"", ResultCode.RESULT_100044.getCode());
         }

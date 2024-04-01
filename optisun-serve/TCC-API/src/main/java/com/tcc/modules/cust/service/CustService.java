@@ -5,6 +5,7 @@ import com.tcc.common.utils.PageUtils;
 import com.tcc.modules.cust.entity.CustEntity;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -71,5 +72,7 @@ public interface CustService extends IService<CustEntity> {
     void userMergeGroup(String susername, String dusername);
 
     void changeUpGroup(String susername, String dusername);
+
+    BigDecimal getMoneyNow(Long custId);
 }
 

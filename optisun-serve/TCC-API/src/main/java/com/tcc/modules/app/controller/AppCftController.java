@@ -162,8 +162,8 @@ public class AppCftController extends AbstractAppController {
 //                json.putOpt("lockTime", DateUtil.date(item.getLockTime() * 1000L).toString());
 //            }
             //计算还剩余多少天
-            json.putOpt("lastDays", ((item.getExpireTime()-DateUtils.getCurrentTime())>0?(item.getExpireTime()-DateUtils.getCurrentTime())+3600*24:1) / 3600/24);//20240318修改剩余时间
-            //json.putOpt("lastDays", ((item.getExpireTime()-DateUtils.getCurrentTime())>0?(item.getExpireTime()-DateUtils.getCurrentTime()):0) / 3600/24);
+            //json.putOpt("lastDays", ((item.getExpireTime()-DateUtils.getCurrentTime())>0?(item.getExpireTime()-DateUtils.getCurrentTime())+3600*24:1) / 3600/24);//20240318修改剩余时间
+            json.putOpt("lastDays", ((item.getExpireTime()-DateUtils.getCurrentTime())>0?(item.getExpireTime()-DateUtils.getCurrentTime()):0) / 3600/24);//20240401修改剩余时间
             //计算已购买多少个小时
             json.putOpt("hours", (DateUtils.getCurrentTime() - item.getCreateTime()) / 3600);
             json.putOpt("totalProfit", lOrderService.getTotalProfit(now, item));
@@ -177,13 +177,13 @@ public class AppCftController extends AbstractAppController {
             if(item.getOrderStatus()==1){                   //进行中的订单
                 if(item.getGoodsIsDay().equals(1)){         //产品订单是否日反
                     //当前日期大于购买日期 且 当前日期大于上次领取日期 20240306搁置
-                    if(DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(item.getCreateTime())) > 0 &&
+                    /*if(DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(item.getCreateTime())) > 0 &&
                             DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(item.getReceiveTime())) > 0)
                     {
                         json.putOpt("iscanReceive", true);
-                    }
-
-                    /*if(Objects.equals(item.getCreateTime(), item.getReceiveTime()) && DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(item.getCreateTime())) == 0){
+                    }*/
+                    //20240401修改 当日可领取
+                    if(Objects.equals(item.getCreateTime(), item.getReceiveTime()) && DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(item.getCreateTime())) == 0){
                         //创建时间等于领取时间 当前日期等于创建日期 当天购买当天领取
                         json.putOpt("iscanReceive", true);
 
@@ -191,7 +191,7 @@ public class AppCftController extends AbstractAppController {
                             DateUtil.formatDate(new Date()).compareTo(DateUtils.timestampToString1(item.getReceiveTime())) > 0){
                         //当前日期大于购买日期 且 当前日期大于上次领取日期 正常隔日领取
                         json.putOpt("iscanReceive", true);
-                    }*/
+                    }
 
                 }else{
                     //非日反订单 计算累计收益 过0点即算一天

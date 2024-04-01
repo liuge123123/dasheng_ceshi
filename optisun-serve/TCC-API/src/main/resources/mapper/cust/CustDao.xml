@@ -218,6 +218,14 @@
         </if>
 
     </select>
-
+    <select id="getMoneyNow" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
+        select
+            IFNULL(sum(IFNULL(goods_price, 0)), 0) as money
+        from
+            l_order
+        where
+            cust_id = #{custId}
+            <![CDATA[ and order_status = 1 ]]>
+    </select>
 
 </mapper>

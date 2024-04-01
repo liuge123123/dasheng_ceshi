@@ -16,6 +16,7 @@ import com.tcc.common.utils.*;
 import com.tcc.common.validator.ValidatorUtils;
 import com.tcc.modules.app.annotation.Login;
 import com.tcc.modules.app.annotation.LoginUser;
+import com.tcc.modules.app.dao.AppAccountDao;
 import com.tcc.modules.app.entity.UserEntity;
 import com.tcc.modules.app.form.LoginForm;
 import com.tcc.modules.app.form.RegisterForm;
@@ -449,6 +450,10 @@ public class AppLoginController extends AbstractAppController {
         TGoodsGradeEntity grade = custScoreLogService.setCustLevel(user);
         user.setGrade(grade);
         user.setLevel(grade.getId());
+
+        BigDecimal oneMoney = custService.getMoneyNow(user.getCustId());
+        user.setPersonCftMoney(oneMoney);
+        
         return R.ok().putData(user);
     }
 

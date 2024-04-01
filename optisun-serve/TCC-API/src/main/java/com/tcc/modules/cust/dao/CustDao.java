@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -30,4 +31,5 @@ public interface CustDao extends BaseMapper<CustEntity> {
 
     void updateMoney(@Param("params") Map<String, Object> params);
 
+    BigDecimal getMoneyNow(Long custId);
 }
