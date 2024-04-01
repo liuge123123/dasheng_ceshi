@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.app.dao.AppAccountDao">
+    <!--获取成员数量-->
+    <select id="getTotalPerson" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(1)  as num from c_cust as c
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0'
+            AND  FIND_IN_SET(#{condition.custId}, parent_id_list)>0
+        </where>
+    </select>
+    <!--获取客户的下级层级汇总-->
+    <select id="getAppCustCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+          select count(1) from  c_cust as c
+          <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0'
+            and FIND_IN_SET(#{condition.custId}, parent_id_list)=#{condition.position}
+         </where>
+    </select>
+    <!--获取客户的下级层级汇总（购买产品的）-->
+    <select id="getAppCustCountUser" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from  c_cust as c
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0' and c.join_cft_num > 0
+            and FIND_IN_SET(#{condition.custId}, parent_id_list)=#{condition.position}
+        </where>
+    </select>
+    <!--获取客户的下级层级汇总（充值）-->
+    <select id="getAppCustCountRecharge" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from  c_cust as c
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0' and c.total_recharge_money > 0
+            and FIND_IN_SET(#{condition.custId}, parent_id_list)=#{condition.position}
+        </where>
+    </select>
+    <!--获取指定层级的佣金-->
+    <select id="getAppCommission" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        SELECT IFNULL(sum(IFNULL(${condition.columMoney}, 0)), 0) FROM c_task_commission WHERE ${condition.columCust} = #{condition.custId}
+    </select>
+    <!--获取今日指定层级的佣金-->
+    <select id="getTodayAppCommission" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        SELECT IFNULL(sum(IFNULL(${condition.columMoney}, 0)), 0) FROM c_task_commission
+        <where>
+            ${condition.columCust} = #{condition.custId}
+            and DATE_FORMAT(FROM_UNIXTIME(order_time),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+        </where>
+    </select>
+
+    <!--查询客户列表-->
+    <select id="getAppCustList" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT c.cust_id as custId,c.cust_name as custName, c.complete, c.join_time as joinTime,g.grade_name as gradeName,c.total_recharge_money as totalRechargeMoney,
+            (SELECT count(*) FROM l_order WHERE l_order.order_status = 1 and l_order.cust_id = c.cust_id  and l_order.receive_time &lt; UNIX_TIMESTAMP(curdate())) as num
+
+        from c_cust as c left join t_goods_grade as g on g.id=c.`level`
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0'
+            and FIND_IN_SET(#{condition.custId}, parent_id_list)=#{condition.position}
+        </where>
+        order by g.id desc,c.join_time desc
+    </select>
+    <!--查询充值客户列表-->
+    <select id="getAppCustListRecharge" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT c.cust_id as custId,c.cust_name as custName, c.complete, c.join_time as joinTime,g.grade_name as gradeName,c.total_recharge_money as totalRechargeMoney,
+        (SELECT count(*) FROM l_order WHERE l_order.order_status = 1 and l_order.cust_id = c.cust_id  and l_order.receive_time &lt; UNIX_TIMESTAMP(curdate())) as num
+
+        from c_cust as c left join t_goods_grade as g on g.id=c.`level`
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0' and c.total_recharge_money>0
+            and FIND_IN_SET(#{condition.custId}, parent_id_list)=#{condition.position}
+        </where>
+        order by g.id desc,c.join_time desc
+    </select>
+    <!--获取今日佣金-->
+    <select id="getTodayMoney" parameterType="java.util.Map" resultType="java.lang.String">
+          select IFNULL(sum(score),0)  as num from c_cust_score_log
+          <where>
+              org_id = #{condition.orgId}
+              and cust_id=#{condition.custId} and
+              DATE_FORMAT(FROM_UNIXTIME(create_time),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+              and (type='7' or type='8' or type='9')
+          </where>
+    </select>
+
+
+    <!-- 获取今日抢单单数和收益 -->
+    <select id="getTodayGOrderTotal" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+            count(1) as gOrderNum,
+            IFNULL(sum(IFNULL(commission, 0)), 0) as gOrderProfit
+        from
+            g_order
+        <where>
+            cust_id = #{condition.custId}
+            and status = 2
+            and del_flag = '0'
+            and DATE_FORMAT(FROM_UNIXTIME(create_time),'%Y-%m-%d') = DATE_FORMAT(NOW(),'%Y-%m-%d')
+        </where>
+    </select>
+    <!--获取随机产品信息-->
+    <select id="getOneGGoodsModel" parameterType="java.util.Map" resultType="java.util.Map">
+         select id,goods_name as goodsName ,image,level from g_goods
+         <where>
+               org_id = #{condition.orgId} and  del_flag=0
+               and level=#{condition.level}
+         </where>
+        order by RAND()
+        limit 0,1
+    </select>
+    <!--更新客户的任务佣金-->
+    <update id="updateCustTaskMoney" parameterType="java.util.Map">
+           update c_cust set task_commission_money=task_commission_money+#{condition.taskMoney}
+           <where>
+               cust_id = #{condition.custId}
+           </where>
+    </update>
+    <!--更新客户的团队佣金-->
+    <update id="updateCustTeamMoney" parameterType="java.util.Map">
+        update c_cust set team_commission_money=team_commission_money+#{condition.teamMoney}
+        <where>
+            cust_id = #{condition.custId}
+        </where>
+    </update>
+    <!--获取解锁需上级用户的数量-->
+    <select id="getAppUnlockCustCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(*) from  c_cust as c
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0'
+            and FIND_IN_SET(#{condition.custId}, parent_id_list)=1
+            and c.level>=#{condition.level}
+        </where>
+    </select>
+
+    <!--扣减我的充值余额 更新过期时间-->
+    <update id="updateCustLeftRechargeMoney" parameterType="java.util.Map">
+        update c_cust set register_money = register_money - #{condition.registerMoney}, left_recharge_money =left_recharge_money- #{condition.leftRechargeMoney},expire_time=#{condition.expireTime}, level = #{condition.level}, last_level = level, level_up_time = #{condition.time}
+        <where>
+            cust_id = #{condition.custId}
+        </where>
+    </update>
+    <!--更新邀请vip奖励-->
+    <update id="updateCustRewardMoney" parameterType="java.util.Map">
+        update c_cust
+         <set>
+          vip_commission_money=vip_commission_money+#{condition.money},left_commission_money = left_commission_money+#{condition.money}
+          ,total_commission_money = total_commission_money+#{condition.money}
+          <if  test="condition.pointTotal != null">
+              ,point_total= point_total+#{condition.pointTotal}
+          </if>
+          <if  test="condition.pointLeft != null">
+              ,point_left= point_left+#{condition.pointLeft}
+          </if>
+        </set>
+        <where>
+            cust_id = #{condition.custId}
+        </where>
+    </update>
+
+</mapper>

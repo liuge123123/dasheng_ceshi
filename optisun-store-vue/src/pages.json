@@ -1,0 +1,290 @@
+{
+    "pages": [
+        {
+            "name": "login",
+            "path": "pages/login/login",
+            "style": {
+                "navigationBarTitleText": "%title.login%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/index/index",
+            "style": {
+                "navigationBarTitleText": "%title.index%"
+            },
+            "isAuth": false
+        },
+        {
+            "path": "pages/me/me",
+            "style": {
+                "navigationBarTitleText": "%title.me%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/order/order",
+            "style": {
+                "navigationBarTitleText": "%title.order%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/team/team",
+            "style": {
+                "navigationBarTitleText": "%title.team%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/team/team_list",
+            "style": {
+                "navigationBarTitleText": "%title.teamlist%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/team/team_list_recharge",
+            "style": {
+                "navigationBarTitleText": "%title.teamlist%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/intro/intro",
+            "style": {
+                "navigationBarTitleText": "%title.intro%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/guide/guide",
+            "style": {
+                "navigationBarTitleText": "%title.guide%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/guide/guidelist",
+            "style": {
+                "navigationBarTitleText": "%title.guide%",
+                "enablePullDownRefresh": false
+            }
+        }, 
+        {
+            "path": "pages/guide/guidedetail",
+            "style": {
+                "navigationBarTitleText": "%title.guide%",
+                "enablePullDownRefresh": false
+            }
+        }, 
+        {
+            "path": "pages/share/share",
+            "style": {
+                "navigationBarTitleText": "%title.share%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/rule/rule",
+            "style": {
+                "navigationBarTitleText": "%title.rule%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/changepwd/changepwd",
+            "style": {
+                "navigationBarTitleText": "%title.changepwd%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/recharge/recharge",
+            "style": {
+                "navigationBarTitleText": "%title.recharge%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/cardlist/cardlist",
+            "style": {
+                "navigationBarTitleText": "%title.cardlist%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/cardadd/cardadd",
+            "style": {
+                "navigationBarTitleText": "%title.cardadd%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/account/account",
+            "style": {
+                "navigationBarTitleText": "%title.account%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/grabbing/grabbing",
+            "style": {
+                "navigationBarTitleText": "%title.grabbing%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/grabbing_detail/grabbing_detail",
+            "style": {
+                "navigationBarTitleText": "%title.grabbing%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/withdraw/withdraw",
+            "style": {
+                "navigationBarTitleText": "%title.withdraw%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/cashpwd/cashpwd",
+            "style": {
+                "navigationBarTitleText": "%title.cashpwd%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/luck_draw/luck_draw",
+            "style": {
+                "navigationBarTitleText": "%title.luckdraw%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/sign_in/sign_in",
+            "style": {
+                "navigationBarTitleText": "%title.signin%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/cft/cft",
+            "style": {
+                "navigationBarTitleText": "%title.cft%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/cftnew/cftnew",
+            "style": {
+                "navigationBarTitleText": "%title.cftnew%",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/cfthistory/cfthistory",
+            "style": {
+                "navigationBarTitleText": "%title.cfthistory%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/shop/shop",
+            "style": {
+                "navigationBarTitleText": "%title.shop%",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/goods/goods",
+            "style": {
+                "navigationBarTitleText": "title.goods",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/cart/cart",
+            "style": {
+                "navigationBarTitleText": "%title.cart%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/order_preview/order_preview",
+            "style": {
+                "navigationBarTitleText": "%title.orderpreview%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/order_success/order_success",
+            "style": {
+                "navigationBarTitleText": "%title.ordersuccess%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/order_detail/order_detail",
+            "style": {
+                "navigationBarTitleText": "%title.orderdetail%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/level/level",
+            "style": {
+                "navigationBarTitleText": "%title.level%",
+                "enablePullDownRefresh": false
+            }
+        },
+        {
+            "path": "pages/forget/forget",
+            "style": {
+                "navigationBarTitleText": "%title.forget%",
+                "enablePullDownRefresh": false
+            },
+            "nologin":true
+        },
+        {
+            "path": "pages/download/download",
+            "style": {
+                "navigationBarTitleText": "%title.download%",
+                "enablePullDownRefresh": false
+            },
+            "nologin":true
+        },
+        {
+            "path": "pages/treasure/treasure",
+            "style": {
+                "navigationBarTitleText": "%title.treasure%",
+                "enablePullDownRefresh": false
+            },
+            "nologin":true
+        }
+    ],
+    "subPackages": [],
+    "globalStyle": {
+        "navigationBarTextStyle": "white",
+        "navigationBarTitleText": "Open AI",
+        "navigationBarBackgroundColor": "#CAA160",
+        "backgroundColor": "#F8F8F8",
+        "navigationStyle": "custom"
+    },
+    "condition": {
+        //模式配置，仅开发期间生效
+        "current": 0,
+        //当前激活的模式(list 的索引项)
+        "list": [
+            {
+                "name": "",
+                //模式名称
+                "path": "",
+                //启动页面，必选
+                "query": ""
+                //启动参数，在页面的onLoad函数里面得到
+            }
+        ]
+    }
+}

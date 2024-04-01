@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.g.dao.GOrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.g.entity.GOrderEntity" id="gOrderMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="custId" column="cust_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="roomId" column="room_id"/>
+        <result property="money" column="money"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="num" column="num"/>
+        <result property="comRate" column="com_rate"/>
+        <result property="commission" column="commission"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        m.id,
+        m.order_no as orderNo,
+        m.goods_id as goodsId,
+        m.goods_name as goodsName,
+        m.goods_img as goodsImg,
+        m.commission,
+        m.status,
+        m.create_by as createBy,
+        m.create_time as createTime,
+        m.is_nb as is_nb,
+        m.salesman_id as salesmanId,
+        m.cust_id as custId,
+        m.cust_name as custName,
+        m.goods_is_day as goodsIsDay,
+        m.goods_income_day as goodsIncomeDay,
+        m.level
+        FROM g_order m
+        <where>
+            m.del_flag = 0
+            <if test="condition.orgId!=null">
+                and m.org_id = #{condition.orgId}
+            </if>
+            <if test="condition.custId!=null">
+                and m.cust_id = #{condition.custId}
+            </if>
+            <if test="condition.key!=null">
+                and ( m.order_no like '%${condition.key}%' or m.cust_name like '%${condition.key}%')
+            </if>
+            <if test="condition.id!=null  and condition.id!= ''">
+                and m.id = #{condition.id}
+            </if>
+            <if test="condition.status!=null">
+                and m.status = #{condition.status}
+            </if>
+            <if test="condition.team!=null">
+                and m.salesman_id in
+                <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by m.create_time desc
+    </select>
+</mapper>

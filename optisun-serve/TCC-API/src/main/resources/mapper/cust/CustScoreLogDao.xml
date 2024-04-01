@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.cust.dao.CustScoreLogDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.cust.entity.CustScoreLogEntity" id="custScoreLogMap">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="score" column="score"/>
+        <result property="beforeScore" column="before"/>
+        <result property="afterScore" column="after"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="sourceId" column="source_id"/>
+    </resultMap>
+    <!--获取记录-->
+    <select id="getScorelist" resultType="java.util.Map" parameterType="java.util.Map">
+        select id,cust_id as custId,score,before_score as beforeScore,after_score as afterScore,remark,direct,type,salesman_id as salesmanId,create_time as createTime ,source_id as sourceId from c_cust_score_log as r
+        <where>
+            <if test="condition.key != null and condition.key != ''">
+                AND r.cust_id = #{condition.key}
+            </if>
+            <if test="condition.type != null and condition.type != ''">
+                AND r.type = #{condition.type}
+            </if>
+            <if test="condition.team!=null">
+                and r.salesman_id in
+                <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order  by r.create_time desc
+    </select>
+
+    <select id="custRewardTotal" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
+        SELECT
+            IFNULL(sum(score), 0) as score
+        FROM
+            c_cust_score_log
+        WHERE
+            cust_id = #{custId}
+            AND type = 7
+            AND remark LIKE '下级充值返佣%'
+    </select>
+
+    <select id="custRewardToday" resultType="java.math.BigDecimal" >
+        SELECT
+            IFNULL(sum(score), 0) as score
+        FROM
+            c_cust_score_log
+        WHERE
+            cust_id = #{custId}
+          AND type = #{type}
+          AND create_time between #{startTime} and #{endTime}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.sys.dao.DictionaryDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.sys.entity.DictionaryEntity" id="dictionaryMap">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="value" column="value"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="comments" column="comments"/>
+        <result property="status" column="status"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="dicType" column="dic_type"/>
+        <result property="isEdit" column="is_edit"/>
+    </resultMap>
+    <select id="selAll" parameterType="java.util.Map"  resultMap="dictionaryMap">
+      select  *  from sys_dictionary
+      <where>
+          org_id = #{orgId}
+          <if test="dicType!=null and dicType!=''">
+            and   dic_type = #{dicType}
+          </if>
+      </where>
+    </select>
+
+    <select id="selectByParentCode"  resultMap="dictionaryMap">
+      select * from sys_dictionary  where org_id = #{orgId} and parent_code = #{parentCode} order by code asc
+    </select>
+
+</mapper>

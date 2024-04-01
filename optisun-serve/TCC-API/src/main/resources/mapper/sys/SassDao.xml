@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tcc.modules.sys.dao.SassDao">
+	<insert id="initSettingData" parameterType="java.lang.Integer" statementType="CALLABLE">
+        {call init_newOrgId_data(#{orgId,mode=IN})}
+	</insert>
+</mapper>

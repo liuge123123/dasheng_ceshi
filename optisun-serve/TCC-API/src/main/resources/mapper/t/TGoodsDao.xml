@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.t.dao.TGoodsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.t.entity.TGoodsEntity" id="tGoodsMap">
+        <result property="id" column="id"/>
+        <result property="gradeId" column="grade_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="price" column="price"/>
+        <result property="estimateprice" column="estimateprice"/>
+        <result property="periodId" column="period_id"/>
+        <result property="avatar" column="avatar"/>
+        <result property="images" column="images"/>
+        <result property="status" column="status"/>
+        <result property="completeNum" column="complete_num"/>
+        <result property="lessNum" column="less_num"/>
+        <result property="isVip" column="is_vip"/>
+        <result property="weigh" column="weigh"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.g.dao.GRoomDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.g.entity.GRoomEntity" id="gRoomMap">
+        <result property="id" column="id"/>
+        <result property="roomName" column="room_name"/>
+        <result property="roomDesc" column="room_desc"/>
+        <result property="image" column="image"/>
+        <result property="priceStart" column="price_start"/>
+        <result property="priceEnd" column="price_end"/>
+        <result property="comRate" column="com_rate"/>
+        <result property="allNum" column="all_num"/>
+        <result property="gradeId" column="grade_id"/>
+        <result property="isOpen" column="is_open"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+    <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        m.id,
+        m.room_name as roomName,
+        m.room_desc as roomDesc,
+        m.image,
+        m.price_start as priceStart,
+        m.price_end as priceEnd,
+        m.com_rate as comRate,
+        m.is_open as isOpen,
+        m.all_num as allNum,
+        m.create_time as createTime,
+        u.grade_name as gradeName
+        FROM g_room m
+        left join t_goods_grade as u on m.grade_id = u.id
+        <where>
+            m.del_flag = 0  and m.org_id=#{condition.orgId}
+            <if test="condition.key!=null">
+                and (m.room_name like '%${condition.key}%' or m.room_desc like '%${condition.key}%')
+            </if>
+            <if test="condition.id!=null  and condition.id!= ''">
+                and m.id = #{condition.id}
+            </if>
+            <if test="condition.categoryId!=null">
+                and m.grade_id = #{condition.categoryId}
+            </if>
+        </where>
+        order by m.create_time desc
+    </select>
+
+</mapper>

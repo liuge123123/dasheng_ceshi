@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.exercise.dao.LuckyDrawDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.exercise.entity.LuckyDrawEntity" id="custMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        m.id,
+        m.name,
+        m.start_time startTime,
+        m.end_time as endTime,
+        m.max_num as maxNum,
+        m.description,
+        m.create_time as createTime
+        FROM exercise_lucky_draw m
+        <where>
+            m.del_flag = 0
+            <if test="condition.nowTime != null "> and m.start_time &lt;= #{condition.nowTime}</if>
+            <if test="condition.nowTime != null "> and m.end_time &gt;= #{condition.nowTime}</if>
+        </where>
+        order by m.create_time desc
+    </select>
+
+    <select id="selectByConditions" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        m.id,
+        m.name,
+        m.max_num as maxNum,
+        m.start_time startTime,
+        m.end_time as endTime,
+        m.description,
+        m.create_time as createTime
+        FROM exercise_lucky_draw m
+        <where>
+            m.del_flag = 0
+            <if test="condition.key!=null">
+                and m.name like '%${condition.key}%'
+            </if>
+            <if test="condition.id!=null  and condition.id!= ''">
+                and m.id = #{condition.id}
+            </if>
+            <if test="condition.name!=null">
+                and m.name = #{condition.name}
+            </if>
+        </where>
+        order by m.create_time desc
+    </select>
+
+</mapper>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.cust.dao.RechargeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.cust.entity.RechargeEntity" id="rechargeMap">
+        <result property="rechargeId" column="recharge_id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="agentId" column="agent_id"/>
+        <result property="isFirst" column="is_first"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="type" column="type"/>
+        <result property="platformBankId" column="platform_bank_id"/>
+        <result property="unit" column="unit"/>
+        <result property="moneyFront" column="money_front"/>
+        <result property="amount" column="amount"/>
+        <result property="moneytype" column="moneytype"/>
+        <result property="moneytypename" column="moneytypename"/>
+        <result property="transid" column="transid"/>
+        <result property="fee" column="fee"/>
+        <result property="checkRemark" column="check_remark"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="orgId" column="org_id"/>
+        <result property="integral" column="integral"/>
+    </resultMap>
+    <!--获取充值记录-->
+    <select id="getRechargelist" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT r.recharge_id as rechargeId,r.order_code as orderCode,c.cust_id as custId,c.cust_name as custName,r.money_front as moneyFront,r.amount,r.type,r.moneytypename,r.transid,r.fee,r.status,r.check_remark as checkRemark,b.name,c.salesman_id as salesmanId,
+               r.is_first as isFirst,r.create_time as createTime,r.update_time as updateTime,b.name as platformBankName,r.check_time as checkTime
+        from  c_recharge   as r join c_cust as c  on r.cust_id=c.cust_id
+        LEFT join s_platform_bank as b on b.id = r.platform_bank_id
+        <where>
+            r.org_id = #{condition.orgId}
+            <if test="condition.key != null and condition.key != ''">
+                AND (c.cust_name like concat('%', #{condition.key}, '%') or r.order_code like concat('%', #{condition.key}, '%') or c.cust_id like concat('%', #{condition.key}, '%') or r.transid like concat('%', #{condition.key}, '%')
+                )
+            </if>
+            <if test="condition.bankName != null and condition.bankName != ''">
+                and b.name = #{condition.bankName}
+            </if>
+            <if test="condition.status != null and condition.status != ''">
+                and r.status = #{condition.status}
+            </if>
+            <if test="condition.moneyTypeName != null and condition.moneyTypeName != ''">
+                and r.moneyTypeName like concat('%',#{condition.moneyTypeName},'%')
+            </if>
+            <if test="condition.mobile != null and condition.mobile != ''">
+                and c.cust_name = #{condition.mobile}
+            </if>
+            <if test="condition.createTime != null and condition.createTime != ''">
+                and FROM_UNIXTIME(r.create_time,'%Y-%m-%d') = #{condition.createTime}
+            </if>
+            <if test="condition.updateTime != null and condition.updateTime != ''">
+                and FROM_UNIXTIME(r.update_time,'%Y-%m-%d') = #{condition.updateTime}
+            </if>
+
+            <if test="condition.team!=null">
+                and c.salesman_id in
+                <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+         order  by r.create_time desc
+    </select>
+    <!--获取充值记录汇总-->
+    <select id="getSuccessCount" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        SELECT IFNULL(sum(IFNULL(r.amount, 0)), 0)
+        from  c_recharge   as r join c_cust as c  on r.cust_id=c.cust_id
+        LEFT join s_platform_bank as b on b.id = r.platform_bank_id
+        <where>
+            r.is_nb = 0
+            and r.status = 1
+            and r.org_id = #{condition.orgId}
+            <if test="condition.key != null and condition.key != ''">
+                AND (c.cust_name like concat('%', #{condition.key}, '%') or r.order_code like concat('%', #{condition.key}, '%') or c.cust_id like concat('%', #{condition.key}, '%') or r.transid like concat('%', #{condition.key}, '%')
+                )
+            </if>
+            <if test="condition.bankName != null and condition.bankName != ''">
+                and b.name = #{condition.bankName}
+            </if>
+            <if test="condition.status != null and condition.status != ''">
+                and r.status = #{condition.status}
+            </if>
+            <if test="condition.moneyTypeName != null and condition.moneyTypeName != ''">
+                and r.moneyTypeName like concat('%',#{condition.moneyTypeName},'%')
+            </if>
+            <if test="condition.mobile != null and condition.mobile != ''">
+                and c.cust_name = #{condition.mobile}
+            </if>
+            <if test="condition.createTime != null and condition.createTime != ''">
+                and FROM_UNIXTIME(r.create_time,'%Y-%m-%d') = #{condition.createTime}
+            </if>
+            <if test="condition.updateTime != null and condition.updateTime != ''">
+                and FROM_UNIXTIME(r.update_time,'%Y-%m-%d') = #{condition.updateTime}
+            </if>
+
+            <if test="condition.team!=null">
+                and c.salesman_id in
+                <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!--充值更新客户余额和充值总金额-->
+    <update id="rechargeUpdateCust" parameterType="java.util.Map">
+        update c_cust set left_recharge_money =left_recharge_money+ #{condition.money},total_recharge_money=total_recharge_money+#{condition.money}
+        <where>
+            cust_id = #{condition.custId}
+        </where>
+    </update>
+    <!--奖励更新余额-->
+    <update id="rewardUpdateCust" parameterType="java.util.Map">
+        update c_cust set left_recharge_money =left_recharge_money+ #{condition.money}
+        <where>
+            cust_id = #{condition.custId}
+        </where>
+    </update>
+
+    <select id="getSumBySuccess" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
+        select
+            sum(amount) as money
+        from
+            c_recharge
+        where
+            cust_id = #{custId}
+            <![CDATA[ and status = 1 ]]>
+    </select>
+
+    <select id="getCountBySuccess" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        select
+            count(*)
+        from
+            c_recharge
+        where
+            cust_id = #{custId}
+            <![CDATA[ and status = 1 ]]>
+    </select>
+</mapper>

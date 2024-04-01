@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.t.dao.TOrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.t.entity.TOrderEntity" id="tOrderMap">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="money" column="money"/>
+        <result property="goodsMoney" column="goods_money"/>
+        <result property="parameter1" column="parameter1"/>
+        <result property="parameter2" column="parameter2"/>
+        <result property="parameter3" column="parameter3"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="status" column="status"/>
+        <result property="bigKind" column="big_kind"/>
+        <result property="gradeId" column="grade_id"/>
+        <result property="sellTime" column="sell_time"/>
+        <result property="sjId" column="sj_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="commission" column="commission"/>
+    </resultMap>
+
+    <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        m.id,
+        c.cust_id as custId,
+        c.cust_name as custName,
+        m.money,
+        m.goods_money as goodsMoney,
+        m.parameter1,
+        m.parameter2,
+        m.parameter3,
+        m.type,
+        m.create_time as createTime,
+        m.status,
+        m.order_no as orderNo,
+        m.sell_time as sellTime,
+        u.grade_name as gradeName,
+        g.goods_name as goodsName,
+        g.avatar as goodsImage,
+        g.period_id as period,
+        c.salesman_id as salesmanId
+        FROM t_order m
+        left join t_goods_grade as u on m.grade_id = u.id
+        left join c_cust as c on c.cust_id = m.cust_id
+        left join t_goods as g on m.goods_id = g.id
+        <where>
+            m.del_flag = 0  and m.org_id=#{condition.orgId}
+            <if test="condition.key!=null">
+                and (m.order_no like '%${condition.key}%')
+            </if>
+            <if test="condition.id!=null  and condition.id!= ''">
+                and m.id = #{condition.id}
+            </if>
+            <if test="condition.categoryId!=null">
+                and m.grade_id = #{condition.categoryId}
+            </if>
+            <if test="condition.status!=null">
+                and m.status = #{condition.status}
+            </if>
+            <if test="condition.custId!=null">
+                and m.cust_id = #{condition.custId}
+            </if>
+            <if test="condition.money!=null">
+                and m.money = #{condition.money}
+            </if>
+            <if test="condition.team!=null">
+                and c.salesman_id in
+                <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by m.create_time desc
+    </select>
+</mapper>

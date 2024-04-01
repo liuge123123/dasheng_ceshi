@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.cust.dao.CustDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.cust.entity.CustEntity" id="custMap">
+        <result property="custId" column="cust_id"/>
+        <result property="custName" column="cust_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="mobile" column="mobile"/>
+        <result property="pwd" column="pwd"/>
+        <result property="salt" column="salt"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="parentIdList" column="parent_id_list"/>
+        <result property="parentCode" column="parent_code"/>
+        <result property="inviteCode" column="invite_code"/>
+        <result property="signature" column="signature"/>
+        <result property="realName" column="real_name"/>
+        <result property="status" column="status"/>
+        <result property="headImg" column="head_img"/>
+        <result property="pwd1" column="pwd1"/>
+        <result property="salt1" column="salt1"/>
+        <result property="balance" column="balance"/>
+        <result property="frozenAmount" column="frozen_amount"/>
+        <result property="salesmanId" column="salesman_id"/>
+        <result property="level" column="level"/>
+        <result property="address" column="address"/>
+        <result property="lastLevel" column="last_level"/>
+        <result property="levelUpTime" column="level_up_time"/>
+        <result property="childNum" column="child_num"/>
+        <result property="wechatNo" column="wechat_no"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="nextMoney" column="next_money"/>
+        <result property="personBackMoney" column="person_back_money"/>
+        <result property="personRobMoney" column="person_rob_money"/>
+        <result property="complete" column="complete"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="joinIp" column="join_ip"/>
+        <result property="joinTime" column="join_time"/>
+    </resultMap>
+
+    <update id="updateMoney" parameterType="java.util.Map">
+        update
+        c_cust
+        <set>
+
+            <if test="params.totalRechargeMoney != null">
+                total_recharge_money = total_recharge_money + #{params.totalRechargeMoney},
+            </if>
+            <if test="params.LeftRechargeMoney != null">
+                left_recharge_money = left_recharge_money + #{params.LeftRechargeMoney},
+            </if>
+            <if test="params.totalCommissionMoney != null">
+                total_commission_money = total_commission_money + #{params.totalCommissionMoney},
+            </if>
+            <if test="params.leftCommissionMoney!=null">
+                left_commission_money = left_commission_money +#{params.leftCommissionMoney},
+            </if>
+            <if test="params.teamCommissionMoney != null">
+                team_commission_money = team_commission_money + #{params.teamCommissionMoney},
+            </if>
+            <if test="params.fundCommissionMoney != null">
+                fund_commission_money = fund_commission_money + #{params.fundCommissionMoney},
+            </if>
+            <if test="params.otherCommissionMoney != null">
+                other_commission_money = other_commission_money + #{params.otherCommissionMoney},
+            </if>
+            <if test="params.personCftMoney != null">
+                person_cft_money = person_cft_money + #{params.personCftMoney},
+            </if>
+            <if test="params.joinCftNum != null">
+                join_cft_num = join_cft_num + #{params.joinCftNum},
+            </if>
+            <if test="params.luckLeftNum != null">
+                luck_left_num = luck_left_num + #{params.luckLeftNum},
+            </if>
+            <if test="params.luckTotalNum != null">
+                luck_total_num = luck_total_num + #{params.luckTotalNum},
+            </if>
+            <if test="params.pointLeft != null">
+                point_left = point_left + #{params.pointLeft},
+            </if>
+            <if test="params.pointTotal!= null">
+                point_total = point_total + #{params.pointTotal},
+            </if>
+<!--            <if test="params.registerMoney!=null">-->
+<!--                register_money =0-->
+<!--            </if>-->
+            <if test="params.registerMoney!=null">
+                register_money = register_money + #{params.registerMoney},
+            </if>
+            <if test="params.level != null">
+                level = #{params.level},
+            </if>
+            <if test="params.lastLevel !=null">
+                last_level = #{params.lastLevel},
+            </if>
+        </set>
+        <where>
+            cust_id = #{params.custId}
+        </where>
+    </update>
+
+    <!--查询客户列表-->
+    <select id="getCustList" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        c.cust_id as custId,
+        c.parent_id as parentId,
+        c.parent_id_list as parentIdList,
+        c.cust_name as custName,
+        c.nick_name as nickName,
+        c.mobile_area as mobileArea,
+        c.mobile,
+        c.head_img as headImg,
+        c.level,
+        c.last_level  as lastLevel,
+        c.level_up_time as levelUpTime,
+        c.salesman_id as salesmanId,
+        c.is_nb as isNb,
+        c.status,
+        c.task_limit as taskLimit,
+        c.is_privilege as isPrivilege,
+        c.create_time as createTime,
+        c.login_time as loginTime,
+        c.login_ip as loginIp,
+        c.join_ip as joinIp,
+        c.join_time as joinTime,
+        c.continuous_sign_in as continuousSignIn,
+        c.max_continuous_sign_in as maxContinuousSignIn,
+        c.join_cft_num as joinCftNum,
+        c.person_cft_money as personCftMoney,
+        c.fund_commission_money as fundCommissionMoney,
+        c.register_money as registerMoney,
+        c.total_recharge_money as totalRechargeMoney,
+        c.left_recharge_money as leftRechargeMoney,
+        c.total_commission_money as totalCommissionMoney,
+        c.left_commission_money as leftCommissionMoney,
+        c.task_commission_money as taskCommissionMoney,
+        c.team_commission_money as teamCommissionMoney,
+        c.luck_left_num as luckLeftNum,
+        c.luck_total_num as luckTotalNum,
+        c.complete,
+        c.remark,
+        c.withdraw_limit as withdrawLimit,
+        g.grade_name as gradeName,
+        g.money,
+        (SELECT count(*) from c_cust  x WHERE x.parent_id = c.cust_id) as num
+        from c_cust as c left join t_goods_grade as g on g.grade_level=c.`level`
+        <where>
+            c.org_id = #{condition.orgId} and c.del_flag='0'
+            <if test="condition.custId != null and condition.custId != ''">
+                AND c.cust_id = #{condition.custId}
+            </if>
+            <if test="condition.mobile != null and condition.mobile != ''">
+                AND (c.mobile like concat('%', #{condition.mobile}, '%') OR c.cust_name like concat('%',
+                #{condition.mobile}, '%'))
+            </if>
+            <if test="condition.levelId != null and condition.levelId != ''">
+                AND c.level = #{condition.levelId}
+            </if>
+            <if test="condition.loginIp != null and condition.loginIp != ''">
+                AND c.login_ip like concat('%', #{condition.loginIp}, '%')
+            </if>
+            <if test="condition.totalRechargeMoney != null and condition.totalRechargeMoney != '' and
+              condition.totalRechargeMoney == 1  ">
+                AND c.total_recharge_money > 0
+            </if>
+            <if test="condition.totalRechargeMoney != null and condition.totalRechargeMoney != '' and
+              condition.totalRechargeMoney == 2  ">
+                AND c.total_recharge_money = 0
+            </if>
+            <if test="condition.totalRechargeMoney != null and condition.totalRechargeMoney != '' and
+              condition.totalRechargeMoney == 3  ">
+                AND c.remark != ''
+            </if>
+            <if test="condition.totalRechargeMoney != null and condition.totalRechargeMoney != '' and
+              condition.totalRechargeMoney == 4  ">
+                AND c.join_cft_num > 0
+            </if>
+            <if test="condition.totalRechargeMoney != null and condition.totalRechargeMoney != '' and
+              condition.totalRechargeMoney == 5  ">
+                AND c.join_cft_num = 0
+            </if>
+            <if test="condition.joinIp != null and condition.joinIp != ''">
+                AND c.join_ip like concat('%', #{condition.joinIp}, '%')
+            </if>
+            <if test="condition.joinTime != null and condition.joinTime != ''">
+                and FROM_UNIXTIME(c.join_time,'%Y-%m-%d') = #{condition.joinTime}
+            </if>
+            <if test="condition.key != null and condition.key != ''">
+                AND (c.cust_name like concat('%', #{condition.key}, '%') or c.cust_id like concat('%', #{condition.key},
+                '%') or c.mobile like concat('%', #{condition.key}, '%')
+                )
+            </if>
+            <if test="condition.level>0 and condition.currentCustId>0">
+                and FIND_IN_SET(#{condition.currentCustId}, parent_id_list)=#{condition.level}
+            </if>
+            <if test="condition.team!=null">
+                and c.salesman_id in
+                <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by
+        <if test="condition.sortField != 'num' ">
+            c.${condition.sortField} ${condition.sortOrder}
+        </if>
+
+        <if test="condition.sortField == 'num' ">
+            num ${condition.sortOrder}
+        </if>
+
+    </select>
+
+
+</mapper>

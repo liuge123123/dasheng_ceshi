@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.sys.dao.SysOrgDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.sys.entity.SysOrgEntity" id="sysOrgMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="contents" column="contents"/>
+        <result property="status" column="status"/>
+        <result property="logo" column="logo"/>
+        <result property="appId" column="app_id"/>
+        <result property="appSecret" column="app_secret"/>
+        <result property="mchid" column="mchid"/>
+        <result property="apikey" column="apikey"/>
+        <result property="certPem" column="cert_pem"/>
+        <result property="keyPem" column="key_pem"/>
+        <result property="sysTitle" column="sys_title"/>
+        <result property="sysLogo" column="sys_logo"/>
+    </resultMap>
+
+
+</mapper>

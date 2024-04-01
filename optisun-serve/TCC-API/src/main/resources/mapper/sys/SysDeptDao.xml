@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.sys.dao.SysDeptDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.sys.entity.SysDeptEntity" id="sysDeptMap">
+        <result property="deptId" column="dept_id"/>
+        <result property="name" column="name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createUserId" column="create_user_id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="sort" column="sort"/>
+    </resultMap>
+    <delete id="deleteDeptRealtion"   parameterType="java.lang.String">
+        DELETE
+        FROM
+            sys_dept_relation
+        WHERE
+            descendant IN (
+                SELECT
+                    temp.descendant
+                FROM
+                    (
+                        SELECT
+                            descendant
+                        FROM
+                            sys_dept_relation
+                        WHERE
+                            ancestor = #{id}
+                    ) temp
+            )
+    </delete>
+
+    <!--关联查询部门列表-->
+    <select id="selectDeptDtoList" resultType="com.tcc.modules.sys.entity.SysDeptEntity">
+		SELECT
+			t.*
+		FROM
+			sys_dept t
+		LEFT JOIN sys_dept_relation dr ON t.dept_id = dr.descendant
+		WHERE dr.ancestor = 0 and t.org_id = #{orgId} and t.del_flag = 0
+	</select>
+
+</mapper>

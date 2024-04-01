@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.cust.dao.BankDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.cust.entity.BankEntity" id="bankMap">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="account" column="account"/>
+        <result property="iban" column="iban"/>
+        <result property="chusheng" column="chusheng"/>
+        <result property="parameter1" column="parameter1"/>
+        <result property="image" column="image"/>
+        <result property="type" column="type"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="cateId" column="cate_id"/>
+        <result property="cateName" column="cate_name"/>
+        <result property="orgId" column="org_id"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+    </resultMap>
+    <!--获取客户银行卡列表-->
+    <select id="getBankList" resultType="java.util.Map" parameterType="java.util.Map">
+          select b.id,b.cust_id as custId,b.name,b.account,b.cate_name as cateName,b.image,b.create_time as createTime,c.cust_name as custName,c.salesman_id as salesmanId
+          from c_bank as b join c_cust as c  on b.cust_id=c.cust_id
+          <where>
+              b.org_id = #{condition.orgId} and b.del_flag='0'
+              <if test="condition.key != null and condition.key != ''">
+                  AND (c.cust_name like concat('%', #{condition.key}, '%') or c.cust_id like concat('%', #{condition.key}, '%') or b.name like concat('%', #{condition.key}, '%')
+                  or b.account like concat('%', #{condition.key}, '%')
+                  )
+              </if>
+              <if test="condition.team!=null">
+                  and c.salesman_id in
+                  <foreach item="item" collection="condition.team" separator="," open="(" close=")" index="">
+                      #{item}
+                  </foreach>
+              </if>
+          </where>
+          order  by b.create_time desc
+    </select>
+
+
+</mapper>

@@ -1,0 +1,74 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        connection-timeout: 60000ms
+        threads:
+            max: 1000
+            min-spare: 30
+    port: 8099
+    servlet:
+        context-path: /api/v1
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+            driver-class-name: com.mysql.cj.jdbc.Driver
+#            url: jdbc:mysql://rm-4xot7adm5vz3off56ko.mysql.germany.rds.aliyuncs.com/openai-prd?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Africa/Abidjan
+#            username: openai
+#            password: openai123!@#
+            url: jdbc:mysql://rm-4xo7n2ccl1uv7olwl.mysql.germany.rds.aliyuncs.com/optisun?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Africa/Windhoek
+            username: optisun
+            password: Aaa11111
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 60000
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            #Oracle需要打开注释
+            #validation-query: SELECT 1 FROM DUAL
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: false
+                wall:
+                    config:
+                        multi-statement-allow: true
+
+    redis:
+        open: true  # 是否开启redis缓存  true开启   false关闭
+        database: 2
+        host: localhost
+        port: 6379
+        password: 123456    # 密码（默认为空）
+        timeout: 6000ms  # 连接超时时长（毫秒）
+        jedis:
+            pool:
+                max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+                max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+                max-idle: 10      # 连接池中的最大空闲连接
+                min-idle: 5       # 连接池中的最小空闲连接
+    cache:
+        type: redis
+    mvc:
+        throw-exception-if-no-handler-found: true
+    #    add-mappings: false
+
+    rabbitmq:
+        host: localhost
+        port: 5672
+        username: guest
+        password: guest
+        virtual-host: /

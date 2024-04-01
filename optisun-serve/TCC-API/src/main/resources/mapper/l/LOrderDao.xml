@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.l.dao.LOrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.l.entity.LOrderEntity" id="lOrderMap">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="custName" column="cust_name"/>
+        <result property="goodsId" column="goods_id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="goodsImg" column="goods_img"/>
+        <result property="goodsPrice" column="goods_price"/>
+        <result property="goodsRate" column="goods_rate"/>
+        <result property="goodsCycle" column="goods_cycle"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="doneTime" column="done_time"/>
+        <result property="salesmanId" column="salesman_id"/>
+    </resultMap>
+
+
+</mapper>

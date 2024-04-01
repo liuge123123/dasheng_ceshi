@@ -1,0 +1,49 @@
+spring:
+  #  dev|test|prod
+  profiles:
+    active: dev
+  # jackson dateformat
+  jackson:
+    time-zone: GMT
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  web:
+    resources:
+      static-locations: classpath:/resources/,classpath:/static/,file:${common.filePath}
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  typeAliasesPackage: com.tcc.modules.*.entity
+  global-config:
+    db-config:
+      id-type: AUTO
+      field-strategy: NOT_NULL
+      column-underline: true
+      logic-delete-value: -1
+      logic-not-delete-value: 0
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+
+cys:
+  redis:
+    open: false
+  shiro:
+    redis: false
+  jwt:
+    secret: 0525c702ece5cc72d93ede78878723cbb83751d4
+    expire: 604800
+    header: token
+
+# Swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: false

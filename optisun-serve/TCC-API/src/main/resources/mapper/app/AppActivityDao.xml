@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.app.Dao.AppActivityDao">
+    <!--获取活动列表-->
+    <select id="getActivityList" resultType="java.util.Map" parameterType="java.util.Map">
+	  SELECT id,image_list as imageList,title,sub_title as subTitle,start_time as startTime,end_time as endTime,address from act_activity as a
+	  <where>
+          a.org_id = #{condition.orgId} and a.status =1 and a.del_flag = 0
+      </where>
+      order by a.end_time desc
+    </select>
+    <!--获取活动报名列表-->
+    <select id="getActivitySignList" resultType="java.util.Map" parameterType="java.util.Map">
+      select a.user_id as userId,u.real_name as realName,u.head_image_url as headImageUrl,a.create_time  as createTime  from act_sign as a join act_activity as b on a.activity_id = b.id
+				join member_user as u on u.id = a.user_id
+        <where>
+            a.org_id = #{condition.orgId}  and a.activity_id = #{condition.activityId}
+        </where>
+        order by a.create_time desc
+    </select>
+    <!--获取我的活动列表-->
+    <select id="getMyActivityList" resultType="java.util.Map" parameterType="java.util.Map">
+         SELECT a.id,image_list as imageList,title,sub_title as subTitle,start_time as startTime,end_time as endTime,address from act_activity as a
+        join act_sign as b on b.activity_id = a.id
+        <where>
+            b.user_id = #{condition.userId} and  a.org_id = #{condition.orgId}
+        </where>
+    </select>
+</mapper>

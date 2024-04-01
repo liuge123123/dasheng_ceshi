@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.exercise.dao.PrizeDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.exercise.entity.PrizeEntity" id="custMap">
+        <result property="id" column="id"/>
+        <result property="prizeType" column="prize_type"/>
+        <result property="prizeName" column="prize_name"/>
+        <result property="prizeValue" column="prize_value"/>
+        <result property="ratio" column="ratio"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.cust.dao.TaskCommissionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.cust.entity.TaskCommissionEntity" id="taskCommissionMap">
+        <result property="orderId" column="order_id"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="orderCust" column="order_cust"/>
+        <result property="firstCustId" column="first_cust_id"/>
+        <result property="firstSalesmanId" column="first_salesman_id"/>
+        <result property="firstIsNb" column="first_is_nb"/>
+        <result property="fisrtMoney" column="fisrt_money"/>
+        <result property="secondCustId" column="second_cust_id"/>
+        <result property="secondSalesmanId" column="second_salesman_id"/>
+        <result property="secondIsNb" column="second_is_nb"/>
+        <result property="secondMoney" column="second_money"/>
+        <result property="thirdCustId" column="third_cust_id"/>
+        <result property="thirdSalesmanId" column="third_salesman_id"/>
+        <result property="thirdIsNb" column="third_is_nb"/>
+        <result property="thirdMoney" column="third_money"/>
+        <result property="fourCustId" column="four_cust_id"/>
+        <result property="fourSalesmanId" column="four_salesman_id"/>
+        <result property="fourIsNb" column="four_is_nb"/>
+        <result property="fourMoney" column="four_money"/>
+        <result property="fiveCustId" column="five_cust_id"/>
+        <result property="fiveSalesmanId" column="five_salesman_id"/>
+        <result property="fiveIsNb" column="five_is_nb"/>
+        <result property="fiveMoney" column="five_money"/>
+        <result property="sixCustId" column="six_cust_id"/>
+        <result property="sixSalesmanId" column="six_salesman_id"/>
+        <result property="sixIsNb" column="six_is_nb"/>
+        <result property="sixMoney" column="six_money"/>
+        <result property="sevenCustId" column="seven_cust_id"/>
+        <result property="sevenSalesmanId" column="seven_salesman_id"/>
+        <result property="sevenIsNb" column="seven_is_nb"/>
+        <result property="sevenMoney" column="seven_money"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.sys.dao.SysDataPermissionDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.sys.entity.SysDataPermissionEntity" id="sysDataPermissionMap">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="type" column="type"/>
+        <result property="relationType" column="relation_type"/>
+        <result property="relationId" column="relation_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <select id="getByUserId" resultType="java.util.Map">
+        select a.id            as id,
+               a.relation_type as relationType,
+               a.relation_id   as relationId,
+               b.name          as relationName
+        from sys_data_permission a
+                 left join sys_user b on a.relation_id = b.user_id
+        where a.relation_type = 1
+          and a.user_id = #{userId}
+        union
+        select a.id            as id,
+               a.relation_type as relationType,
+               a.relation_id   as relationId,
+               c.name          as relationName
+        from sys_data_permission a
+                 left join sys_dept c on a.relation_id = c.dept_id
+        where a.relation_type = 2
+          and a.user_id = #{userId}
+    </select>
+
+    <select id="getDeptPermission" resultType="java.util.Map">
+        select a.relation_type as type,
+               b.dept_id       as id,
+               b.name          as name,
+               b.parent_id     as parentId
+        from sys_data_permission a
+                 join sys_dept b on a.relation_type = 2 and a.relation_id = b.dept_id
+        where a.user_id = #{userId}
+    </select>
+
+
+    <select id="getUserPermission" resultType="java.util.Map">
+        select a.relation_type as type,
+               b.user_id       as id,
+               b.name          as name,
+               c.dept_id       as deptId
+        from sys_data_permission a
+                 join sys_user b on a.relation_type = 1 and a.relation_id = b.user_id
+                 left join s_personnel c on b.user_id = c.user_id
+        where a.user_id = #{userId}
+    </select>
+
+    <!--获取员工的下级-->
+    <select id="getChildList" parameterType="java.util.Map" resultType="java.util.Map">
+        select user_id as id,username,name,type,relation_id as parentId from sys_user
+        <where>
+            org_id=#{condition.orgId} and status='1'
+            and FIND_IN_SET(user_id,get_value_of(#{condition.userId}))
+        </where>
+    </select>
+
+</mapper>

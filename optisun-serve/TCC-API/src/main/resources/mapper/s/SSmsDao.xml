@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.s.dao.SSmsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.s.entity.SSmsEntity" id="sSmsMap">
+        <result property="id" column="id"/>
+        <result property="transId" column="trans_id"/>
+        <result property="money" column="money"/>
+        <result property="isDone" column="is_done"/>
+        <result property="receiveTime" column="receive_time"/>
+        <result property="doneTime" column="done_time"/>
+    </resultMap>
+
+
+</mapper>

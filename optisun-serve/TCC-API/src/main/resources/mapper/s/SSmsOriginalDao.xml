@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.s.dao.SSmsOriginalDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.s.entity.SSmsOriginalEntity" id="sSmsOriginalMap">
+        <result property="id" column="id"/>
+        <result property="comeTo" column="come_to"/>
+        <result property="allContent" column="all_content"/>
+        <result property="receiveTime" column="receive_time"/>
+    </resultMap>
+
+    <select id="getList" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+            a.id as id,
+            a.come_to as comeTo,
+            a.all_content as allContent,
+            a.parse_status as parseStatus,
+            a.receive_time as receiveTime,
+            b.id as mId,
+            b.trans_id as transId,
+            b.trans_date as transDate,
+            b.money as money,
+            b.is_done as isDone,
+            b.done_time as doneTime,
+            b.remark as remark,
+            b.wallet as wallet
+        FROM
+            s_sms_original a
+            left join s_sms b on a.id = b.rel_id
+        <where>
+            <if test="condition.key != null and condition.key != ''">
+                and a.all_content like CONCAT('%', #{condition.key}, '%')
+            </if>
+            <if test="condition.parseStatus != null and condition.parseStatus != ''">
+                and a.parse_status = #{condition.parseStatus}
+            </if>
+            <if test="condition.wallet != null and condition.wallet != ''">
+                and b.wallet = #{condition.wallet}
+            </if>
+            <if test="condition.receiveTime != null and condition.receiveTime != ''">
+                and FROM_UNIXTIME(a.receive_time / 1000, '%Y-%m-%d') = #{condition.receiveTime}
+            </if>
+            <if test="condition.transId != null and condition.transId != ''">
+                and b.trans_id = #{condition.transId}
+            </if>
+            <if test="condition.money != null and condition.money != ''">
+                and b.money = #{condition.money}
+            </if>
+            <if test="condition.isDone != null and condition.isDone != ''">
+                and b.is_done = #{condition.isDone}
+            </if>
+            <if test="condition.doneTime != null and condition.doneTime != ''">
+                and FROM_UNIXTIME(b.done_time / 1000, '%Y-%m-%d') = #{condition.doneTime}
+            </if>
+        </where>
+        order by a.receive_time desc
+    </select>
+
+    <select id="getSuccessCount" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        SELECT
+        IFNULL(sum(IFNULL(b.money, 0)), 0)
+        FROM
+        s_sms_original a
+        left join s_sms b on a.id = b.rel_id
+        <where>
+            a.parse_status = 2
+            and b.is_done = 1
+            <if test="condition.key != null and condition.key != ''">
+                and a.all_content like CONCAT('%', #{condition.key}, '%')
+            </if>
+            <if test="condition.wallet != null and condition.wallet != ''">
+                and b.wallet = #{condition.wallet}
+            </if>
+            <if test="condition.receiveTime != null and condition.receiveTime != ''">
+                and FROM_UNIXTIME(a.receive_time / 1000, '%Y-%m-%d') = #{condition.receiveTime}
+            </if>
+            <if test="condition.transId != null and condition.transId != ''">
+                and b.trans_id = #{condition.transId}
+            </if>
+            <if test="condition.money != null and condition.money != ''">
+                and b.money = #{condition.money}
+            </if>
+            <if test="condition.doneTime != null and condition.doneTime != ''">
+                and FROM_UNIXTIME(b.done_time / 1000, '%Y-%m-%d') = #{condition.doneTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getAuditCount" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        SELECT
+        IFNULL(sum(IFNULL(b.money, 0)), 0)
+        FROM
+        s_sms_original a
+        left join s_sms b on a.id = b.rel_id
+        <where>
+            a.parse_status = 2
+            and b.is_done = 0
+        </where>
+    </select>
+
+
+</mapper>

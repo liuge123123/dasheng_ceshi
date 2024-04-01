@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.cust.dao.VipCommmissionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.cust.entity.VipCommmissionEntity" id="vipCommmissionMap">
+        <result property="orderId" column="order_id"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="orderCust" column="order_cust"/>
+        <result property="rewardCust" column="reward_cust"/>
+        <result property="rewardMoney" column="reward_money"/>
+    </resultMap>
+
+
+</mapper>

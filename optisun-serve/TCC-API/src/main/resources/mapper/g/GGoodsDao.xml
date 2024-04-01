@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.g.dao.GGoodsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.g.entity.GGoodsEntity" id="gGoodsMap">
+        <result property="id" column="id"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="image" column="image"/>
+        <result property="price" column="price"/>
+        <result property="roomId" column="room_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+    <select id="selectByCondition" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        m.id,
+        m.goods_name as goodsName,
+        m.image,
+        m.price,
+        m.create_by as createBy,
+        m.create_time as createTime,
+        r.grade_name as gradeName
+        FROM g_goods m
+        left join t_goods_grade  as r on m.level = r.id
+        <where>
+            m.del_flag = 0  and m.org_id=#{condition.orgId}
+            <if test="condition.key!=null">
+                and (r.grade_name like '%${condition.key}%' or m.goods_name like '%${condition.key}%')
+            </if>
+            <if test="condition.id!=null  and condition.id!= ''">
+                and m.id = #{condition.id}
+            </if>
+            <if test="condition.categoryId!=null">
+                and m.level = #{condition.categoryId}
+            </if>
+        </where>
+        order by m.create_time desc
+    </select>
+
+</mapper>

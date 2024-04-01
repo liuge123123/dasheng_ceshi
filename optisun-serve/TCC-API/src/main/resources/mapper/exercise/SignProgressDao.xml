@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.exercise.dao.SignProgressDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.exercise.entity.SignProgressEntity" id="signProgressMap">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="custName" column="cust_name"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="signNum" column="sign_num"/>
+        <result property="signProgress" column="sign_progress"/>
+        <result property="lastTime" column="last_time"/>
+    </resultMap>
+
+
+</mapper>

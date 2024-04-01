@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.sys.dao.HomeDao">
+    <!--获取近7天注册情况-->
+    <select id="getRegisterList" resultType="java.util.Map" parameterType="java.util.Map">
+        select u.day1 as date,sum(IFNULL(c.num,0)) as num
+        from ( select DATE_SUB(curdate(),INTERVAL +0 DAY) day1
+        union select DATE_SUB(curdate(),INTERVAL +1 DAY) day2
+        union select DATE_SUB(curdate(),INTERVAL +2 DAY) day3
+        union select DATE_SUB(curdate(),INTERVAL +3 DAY) day4
+        union select DATE_SUB(curdate(),INTERVAL +4 DAY) day5
+        union select DATE_SUB(curdate(),INTERVAL +5 DAY) day6
+        union select DATE_SUB(curdate(),INTERVAL +6 DAY) day7) as u left join
+        (
+        select 1 as num, join_time from c_cust
+        <where>
+            and join_time &lt;= #{endTime}
+            and join_time &gt;= #{startTime}
+            and is_nb=0
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        ) c on FROM_UNIXTIME(c.join_time,'%Y-%m-%d') = u.day1
+        GROUP BY u.day1 order by u.day1 asc
+    </select>
+
+
+
+    <!--=================================================首页统计sql优化=================================================-->
+    <select id="getRechargeMoney" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select
+            IFNULL(sum(IFNULL(amount, 0)), 0)
+        from
+            c_recharge
+        where
+            is_nb = 0
+            and type = '1'
+            and status = 1
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and check_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and check_time <= #{endTime} ]]>
+            </if>
+    </select>
+
+    <select id="getRechargeNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+            count(1)
+        from
+            c_recharge
+        where
+            is_nb = 0
+            and type = '1'
+            and status = 1
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and check_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and check_time <= #{endTime} ]]>
+            </if>
+    </select>
+
+    <select id="getRechargeCustNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from(
+            select
+                cust_id
+            from
+                c_recharge
+            where
+                is_nb = 0
+                and type = '1'
+                and status = 1
+                <if test="team!=null">and salesman_id in
+                    <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                        #{item}
+                    </foreach>
+                    </if>
+                    <if test="startTime != null and startTime != ''">
+                        <![CDATA[ and check_time >= #{startTime} ]]>
+                    </if>
+                    <if test="endTime != null and endTime != ''">
+                        <![CDATA[ and check_time <= #{endTime} ]]>
+                    </if>
+            group by cust_id
+        ) as temp
+    </select>
+
+    <select id="getRechargeFisrtCustNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from(
+            select
+                cust_id
+            from
+                c_recharge
+            where
+                is_nb = 0
+                and type = '1'
+                and status = 1
+                <if test="team!=null">and salesman_id in
+                    <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test="startTime != null and startTime != ''">
+                    <![CDATA[ and check_time >= #{startTime} ]]>
+                </if>
+                <if test="endTime != null and endTime != ''">
+                    <![CDATA[ and check_time <= #{endTime} ]]>
+                </if>
+                and is_first = 1
+            group by cust_id
+        ) as temp
+    </select>
+
+    <select id="getRechargeFisrtMoney" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select
+            IFNULL(sum(IFNULL(amount, 0)), 0)
+        from
+            c_recharge
+        where
+            is_nb = 0
+            and type = '1'
+            and status = 1
+            <if test="team!=null">and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and check_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and check_time <= #{endTime} ]]>
+            </if>
+            and is_first = 1
+    </select>
+
+    <select id="getOrderCommissionMoney" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select
+            IFNULL(sum(IFNULL(commission, 0)), 0)
+        from
+            g_order
+        <where>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and create_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and create_time <= #{endTime} ]]>
+            </if>
+            and is_nb = 0
+            and status = 2
+            <if test="team!=null">and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="getOrderCustNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from(
+        select
+        cust_id
+        from
+        l_order
+        <where>
+            <if test=" startTime != null and startTime != ''">
+                <![CDATA[ and create_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and create_time <= #{endTime} ]]>
+            </if>
+            and is_nb = 0
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        group by cust_id
+        ) as temp
+    </select>
+
+    <select id="getProfitNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from(
+        select
+        cust_id
+        from
+        l_order
+        <where>
+            <if test=" startTime != null and startTime != ''">
+                <![CDATA[ and receive_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and receive_time <= #{endTime} ]]>
+            </if>
+            and is_nb = 0
+            and receive_profit >0
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        group by cust_id
+        ) as temp
+    </select>
+
+    <select id="getWithdrawMoney" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select
+            IFNULL(sum(IFNULL(money, 0)), 0)
+        from
+            c_commission
+        where
+            is_nb = 0
+            and status = 1
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and check_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and check_time <= #{endTime} ]]>
+            </if>
+    </select>
+
+    <select id="getAuditWithdraw" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select
+        IFNULL(sum(IFNULL(money, 0)), 0)
+        from
+        c_commission
+        where
+        is_nb = 0
+        and status = 3
+        <if test="team!=null">
+            and salesman_id in
+            <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startTime != null and startTime != ''">
+            <![CDATA[ and check_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null and endTime != ''">
+            <![CDATA[ and check_time <= #{endTime} ]]>
+        </if>
+    </select>
+
+    <select id="getWithDrawCustNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from(
+            select
+                cust_id
+            from
+                c_commission
+            where
+                is_nb = 0
+                and status = 1
+                <if test="team!=null">
+                    and salesman_id in
+                    <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                        #{item}
+                    </foreach>
+                </if>
+                <if test=" startTime != null and startTime != ''">
+                    <![CDATA[ and check_time >= #{startTime} ]]>
+                </if>
+                <if test="endTime != null and endTime != ''">
+                    <![CDATA[ and check_time <= #{endTime} ]]>
+                </if>
+                group by cust_id
+        ) as temp
+    </select>
+
+    <select id="getGiftMoney" resultType="java.math.BigDecimal" parameterType="java.util.Map">
+        select
+            IFNULL(sum(IFNULL(score, 0)), 0)
+        from
+            c_cust_score_log
+        where
+            is_nb = 0
+            and (type = 1 or type = 3 or type = 4 or type = 12)
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and create_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and create_time <= #{endTime} ]]>
+            </if>
+    </select>
+
+    <select id="getRegisterCustNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+            count(1)
+        from
+            c_cust
+        where
+            is_nb = 0
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and join_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and join_time <= #{endTime} ]]>
+            </if>
+    </select>
+
+    <select id="getLoginCustNum" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select
+            count(1)
+        from
+            c_cust
+        where
+            is_nb = 0
+            <if test="team!=null">
+                and salesman_id in
+                <foreach item="item" collection="team" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="startTime != null and startTime != ''">
+                <![CDATA[ and login_time >= #{startTime} ]]>
+            </if>
+            <if test="endTime != null and endTime != ''">
+                <![CDATA[ and login_time <= #{endTime} ]]>
+            </if>
+    </select>
+
+
+</mapper>

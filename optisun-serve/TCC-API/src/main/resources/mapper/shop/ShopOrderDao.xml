@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tcc.modules.shop.dao.ShopOrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.tcc.modules.shop.entity.ShopOrderEntity" id="shopOrderMap">
+        <result property="id" column="id"/>
+        <result property="custId" column="cust_id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="orderMoney" column="order_money"/>
+        <result property="orderDiscount" column="order_discount"/>
+        <result property="orderPayMoney" column="order_pay_money"/>
+        <result property="orderTime" column="order_time"/>
+        <result property="buyerName" column="buyer_name"/>
+        <result property="buyderPhone" column="buyder_phone"/>
+        <result property="buyerAddress" column="buyer_address"/>
+        <result property="couponId" column="coupon_id"/>
+        <result property="salesmanId" column="salesman_id"/>
+        <result property="isNb" column="is_nb"/>
+    </resultMap>
+
+
+</mapper>
