@@ -150,14 +150,14 @@
 
         
 
-        <el-table-column
+        <!-- <el-table-column
           prop="num"
           header-align="center"
           align="center"
           width="100px"
           sortable='custom'
           label="一级团数">
-        </el-table-column>
+        </el-table-column> -->
       
         
         <el-table-column

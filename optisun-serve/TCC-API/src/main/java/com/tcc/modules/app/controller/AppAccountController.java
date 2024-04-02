@@ -519,6 +519,16 @@ public class AppAccountController extends AbstractAppController {
         params.put("custId", userId);
         return R.ok().putData(custScoreLogService.queryPage(params));
     }
+    @Login
+    @GetMapping("/detailTeam")
+    public R detailTeam(int pageSize, int pageNo) {
+        long userId = getUserId();
+        Map<String, Object> params = new HashMap<>();
+        params.put(Constant.LIMIT, pageSize);
+        params.put(Constant.PAGE, pageNo);
+        params.put("custId", userId);
+        return R.ok().putData(custScoreLogService.queryPageTeam(params));
+    }
 
     @Login
     @GetMapping("/commmissionMoney")

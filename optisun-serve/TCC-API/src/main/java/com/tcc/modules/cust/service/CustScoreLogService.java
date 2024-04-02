@@ -25,6 +25,8 @@ public interface CustScoreLogService extends IService<CustScoreLogEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
 
+    PageUtils queryPageTeam(Map<String, Object> params);
+
     PageUtils queryPageByBack(Map<String, Object> params);
 
 //    void  scorceChageAdd(Long custId, Integer direct, BigDecimal money);

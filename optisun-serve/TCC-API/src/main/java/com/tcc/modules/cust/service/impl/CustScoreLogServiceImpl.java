@@ -66,6 +66,24 @@ public class CustScoreLogServiceImpl extends ServiceImpl<CustScoreLogDao, CustSc
         );
         return new PageUtils(page);
     }
+    //获取团队佣金流水
+    @Override
+    public PageUtils queryPageTeam(Map<String, Object> params) {
+        Long custId = Convert.toLong(params.get("custId"));
+        Integer[] types = Convert.toIntArray(params.get("types"));
+        Integer type = 7;       //团队收益标志 type = 7
+        String remark = Convert.toStr(params.get("remark"));
+        IPage<CustScoreLogEntity> page = this.page(
+                new Query<CustScoreLogEntity>().getPage(params),
+                new LambdaQueryWrapper<CustScoreLogEntity>()
+                        .eq(custId != null, CustScoreLogEntity::getCustId, custId)
+                        .in(types != null && types.length > 0, CustScoreLogEntity::getType, types)
+                        .eq(type != null, CustScoreLogEntity::getType, type)
+                        .likeRight(StrUtil.isNotBlank(remark), CustScoreLogEntity::getRemark, remark)
+                        .orderByDesc(CustScoreLogEntity::getId)
+        );
+        return new PageUtils(page);
+    }
 
     @Override
     public PageUtils queryPageByBack(Map<String, Object> params) {

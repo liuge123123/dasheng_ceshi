@@ -149,8 +149,7 @@
         c.remark,
         c.withdraw_limit as withdrawLimit,
         g.grade_name as gradeName,
-        g.money,
-        (SELECT count(*) from c_cust  x WHERE x.parent_id = c.cust_id) as num
+        g.money
         from c_cust as c left join t_goods_grade as g on g.grade_level=c.`level`
         <where>
             c.org_id = #{condition.orgId} and c.del_flag='0'
