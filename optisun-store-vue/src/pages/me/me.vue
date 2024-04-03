@@ -22,7 +22,7 @@
 				<view class="upgrade-btn"><image class="level" :src="userInfo.grade ? userInfo.grade.image : ''" mode="aspectFit"></image></view>
 			</view>
 			<view class="account">
-				<view class="item" style="width: 100%;">
+				<!-- <view class="item" style="width: 100%;">
 					<view class="text">{{ $t('me.recharge.left') }}</view>
 					<view class="val">{{ $t('app.unit') }} {{ userInfo.leftCommissionMoney ||0}} </view>
 				</view>
@@ -31,17 +31,17 @@
 				</view>
 				<view class="item">
 					<view class="btn"  @click="$goUrl('/pages/withdraw/withdraw')">{{ $t('me.withdraw') }}</view>
-				</view>
-				<!-- <view class="item">
-					<view class="text">{{ $t('me.recharge.left') }}</view>
-					<view class="val">{{ $t('app.unit') }}{{ userInfo.leftRechargeMoney }} </view>
+				</view> -->
+				<view class="item">
+					<view class="text">Portefeuille d'actifs</view>
+					<view class="val">{{ $t('app.unit') }}{{ userInfo.personCftMoney }} </view>
 					<view class="btn" @click="$goUrl('/pages/recharge/recharge')">{{ $t('me.recharge') }}</view>
 				</view>
 				<view class="item">
-					<view class="text">{{ $t('me.total.withdraw') }}</view>
+					<view class="text">{{ $t('me.recharge.left') }}</view>
 					<view class="val">{{ $t('app.unit') }}{{ userInfo.leftCommissionMoney }} </view>
 					<view class="btn"  @click="$goUrl('/pages/withdraw/withdraw')">{{ $t('me.withdraw') }}</view>
-				</view> -->
+				</view>
 			</view>
 
 			<!-- <view class="account-actions">

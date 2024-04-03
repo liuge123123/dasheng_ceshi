@@ -18,6 +18,9 @@
 				<!-- <view id="nav4" class="item" :class="selectIndex == 4 ? 'active' : ''" @click="indexChange(4)">
 					<text>{{$t('order.nav.title')}}</text>
 				</view> -->
+				<view id="nav5" class="item" :class="selectIndex == 5 ? 'active' : ''" @click="indexChange(5)">
+					<text>Récompenses d'équipe</text>
+				</view>
 			</scroll-view>
 			
 			<scroll-view scroll-y @scrolltolower="getData">
@@ -79,6 +82,15 @@
 								<view class="name">{{item.orderPayMoney}} {{$t('app.unit')}}</view>
 								<view class="tips"><text>{{$t('order.no')}}：{{item.orderNo}}</text></view>
 								<view class="tips">{{$t('order.date')}}：{{timeText(item.orderTime)}}</view>
+							</view>
+						</view>
+					</view>
+					<view class="item" v-if="selectIndex == 5" v-for="item in dataList" :key="item.id">
+						<view class="item-body">
+							<view class="wrap">
+								<view class="name"><text>{{item.score}} {{$t('app.unit')}}</text></view>
+								<view class="tips" >{{$t('account.log.type' + item.type)}}</view>
+								<view class="tips">{{timeText(item.createTime)}}</view>
 							</view>
 						</view>
 					</view>
@@ -153,7 +165,10 @@
 					promise = this.getAccountList()
 				}else if(this.selectIndex == 4){
 					promise = this.getShopOrderList()
+				}else if(this.selectIndex == 5){
+					promise = this.getTeamList()
 				}
+				
 				promise.then(res => {
 					this.loadingStatus = 'more'
 					if (res.code == 0) {
@@ -196,6 +211,12 @@
 			},
 			getShopOrderList(){
 				return this.$get('/app/shop/order/list', {
+					pageNo: this.pageNo,
+					pageSize: this.pageSize
+				})
+			},
+			getTeamList(){
+				return this.$get('/app/account/detailTeam', {
 					pageNo: this.pageNo,
 					pageSize: this.pageSize
 				})
